@@ -1,6 +1,6 @@
 # Hi!
 
-## This is a *basic* Playright project in TypeScript for AddEvent's app.
+## This is a *basic* Playwright project in TypeScript for AddEvent's app.
 
 ### Follow these steps to run the tests:
 
