@@ -5,6 +5,7 @@ export class SignInPage {
     readonly emailField: Locator;
     readonly passwordField: Locator;
     readonly signInButton: Locator;
+    readonly errorLocator: Locator;
 
     constructor(page: Page){
         this.page = page;
@@ -13,6 +14,7 @@ export class SignInPage {
         this.emailField = page.getByPlaceholder('E-mail');
         this.passwordField = page.getByPlaceholder('Password');
         this.signInButton = page.getByRole('button', { name: 'Sign In' });
+        this.errorLocator = page.locator('.noti-wr-t1');
     }
 
     async open(){
