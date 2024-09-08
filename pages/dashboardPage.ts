@@ -1,5 +1,5 @@
 import { Page, Locator } from '@playwright/test';
-import { globalSetup, Secrets } from '../globalSetup';
+import { Secrets, HelperFunctions } from './helperFunctions';
 
 export class DashboardPage {
     private page: Page;
@@ -8,51 +8,61 @@ export class DashboardPage {
     readonly eventsLinksOnList: Locator;
     readonly deleteButton: Locator;
     readonly confirmDelete: Locator;
-    readonly baseUrl: string = 'https://app.addevent.com/calendars/';
     private secrets: Secrets;
+    private helpers: HelperFunctions;
 
-    constructor(page: Page){
+    constructor(page: Page) {
         this.page = page;
-        this.secrets = globalSetup();
+        this.helpers = new HelperFunctions();
+        this.secrets = this.helpers.getSecrets();
+        
         // Elements
         this.createLink = page.getByRole('link', { name: 'Create' });
         this.createEventLink = page.getByRole('link', { name: 'Event category' });
-        this.eventsLinksOnList = page.locator('#allevents-list >> .myevent.clickattached');//'#allevents-list').locator('.myevent.clickattached');
-        this.deleteButton = page.getByText('delete', { exact: true })//locator('.delete');
-        this.confirmDelete = page.locator('#confirm-delete-opts').getByText('Confirm'); 
+        this.eventsLinksOnList = page.locator('#allevents-list').locator('.myevent.clickattached');
+        this.deleteButton = page.getByText('delete', { exact: true })
+        this.confirmDelete = page.locator('#confirm-delete-opts').getByText('Confirm');
     }
 
-    getDashboardUrl(){
-        return this.baseUrl + this.secrets.calendarId;
+    getDashboardUrl() {
+        return "/calendars/" + this.secrets.calendarId;
     }
 
-    async open(){
+    async open() {
         await this.page.goto(this.getDashboardUrl());
+        await this.page.waitForURL(`${this.getDashboardUrl()}**`);
+
     }
 
-    async openAllEvent(){
-        await this.page.goto(this.getDashboardUrl() + '/all-events/upcoming');
+    async openAllEvent() {
+        const url = this.getDashboardUrl() + '/all-events/upcoming'
+        await this.page.goto(url);
+        await this.page.waitForURL(url);
+
     }
 
-    async clickCreateLink(){
-        await this.page.waitForLoadState("networkidle")
+    async clickCreateLink() {
+        await this.page.waitForURL(`${this.getDashboardUrl()}**`);
         await this.createLink.click();
     }
 
-    async clickCreateEventLink(){
+    async clickCreateEventLink() {
         await this.createEventLink.click();
     }
 
-    async openCreateEvent(){
+    async openCreateEvent() {
         await this.clickCreateLink();
         await this.clickCreateEventLink();
     }
 
-    async deleteAllEvents(){
-        for (const li of await this.eventsLinksOnList.all()) {
-            await li.click();
-            await this.deleteButton.click();
-            await this.confirmDelete.click();
-        };
+    async deleteAllEvents() {
+        const events = await this.eventsLinksOnList.count();
+        if (events > 0) {
+            for (const event of await this.eventsLinksOnList.all()) {
+                await event.click();
+                await this.deleteButton.click();
+                await this.confirmDelete.click();
+            };
+        }
     }
 }

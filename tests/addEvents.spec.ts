@@ -3,14 +3,14 @@ import { SignInPage } from '../pages/signInPage';
 import { DashboardPage } from '../pages/dashboardPage';
 import { CreateEventPage } from '../pages/createEventPage';
 import { EventViewPage } from '../pages/eventViewPage';
-import { HelperFunctions, Time } from '../pages/helperFunctions';
-import { globalSetup, Secrets } from '../globalSetup';
+import { Secrets, HelperFunctions, Time } from '../pages/helperFunctions';
 
 const helpers = new HelperFunctions();
 let dashboardPage: DashboardPage;
 let createEventPage: CreateEventPage;
 let eventViewPage: EventViewPage;
 let secrets: Secrets;
+
 const fiveMinutesAhead: Time = helpers.getTimeFromNow(5);
 const tenMinutesAhead: Time = helpers.getTimeFromNow(10);
 const fifteenMinutesAhead: Time = helpers.getTimeFromNow(15);
@@ -18,7 +18,7 @@ const thirtyMinutesAhead: Time = helpers.getTimeFromNow(30);
 const sixtyMinutesAhead: Time = helpers.getTimeFromNow(60);
 
 test.beforeAll('Get Secrets', async () => {
-	secrets = globalSetup();
+	secrets = helpers.getSecrets();
 })
 
 test.beforeEach('Login', async ({ page }) => {

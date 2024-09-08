@@ -1,7 +1,11 @@
 import { Page, Locator } from '@playwright/test';
+import { Secrets, HelperFunctions } from './helperFunctions';
 
 export class CreateEventPage {
     page: Page;
+    private secrets: Secrets;
+    private helpers: HelperFunctions;
+
     readonly titleField: Locator;
     readonly internalNameField: Locator;
     readonly startDateField: Locator;
@@ -15,6 +19,8 @@ export class CreateEventPage {
 
     constructor(page: Page){
         this.page = page;
+        this.helpers = new HelperFunctions();
+        this.secrets = this.helpers.getSecrets();
 
         // Elements
         this.titleField = page.getByPlaceholder('Title of your event');
@@ -29,10 +35,11 @@ export class CreateEventPage {
     }
 
     async open(){
-        await this.page.goto('https://app.addevent.com/calendars/GL816827/event/new');
+        await this.page.goto(`/calendars/${this.secrets.calendarId}/event/new`);
     }
 
     async fillTitleField(title: string){
+        await this.page.waitForURL('**/event/new**');
         await this.titleField.clear();
         await this.titleField.fill(title);
     }

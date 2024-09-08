@@ -1,9 +1,10 @@
 import { expect, test } from '@playwright/test';
 import { SignInPage } from '../pages/signInPage';
-import { globalSetup, Secrets } from '../globalSetup';
+import { Secrets, HelperFunctions } from '../pages/helperFunctions';
 import { DashboardPage } from '../pages/dashboardPage';
 
 let signIn: SignInPage;
+const helpers = new HelperFunctions();
 
 test.beforeEach('Login', async ({ page }) => {
 	signIn = new SignInPage(page);
@@ -14,7 +15,7 @@ test.describe('group', {
 	tag: '@signIn',
 }, () => {
 	test.describe('Should Successfully sign in', () => {
-		const accountInfo: Secrets = globalSetup();
+		const accountInfo: Secrets = helpers.getSecrets();
 		const testCases = [
 			{ name: 'With a Hobby account', email: accountInfo.email, password: accountInfo.password, calendarId: accountInfo.calendarId },
 		];
@@ -29,7 +30,7 @@ test.describe('group', {
 	});
 
 	test.describe('Should fail sign in', () => {
-		const secrets: Secrets = globalSetup();
+		const secrets: Secrets = helpers.getSecrets();
 		const testCases = [
 			{ name: 'Without any input', email: "", password: "", image: 'fillOutEmailPassword.png' },
 			{ name: 'With invalid email format only', email: "lkaja.com", password: "", image: 'fillOutEmailPassword.png' },

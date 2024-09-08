@@ -18,7 +18,8 @@ export class SignInPage {
     }
 
     async open(){
-        await this.page.goto('https://app.addevent.com/signin', { waitUntil: "domcontentloaded", timeout: 15000 });
+        await this.page.goto('/signin');
+        await this.page.waitForURL('**/signin**');
     }
 
     async fillEmail(email: string){

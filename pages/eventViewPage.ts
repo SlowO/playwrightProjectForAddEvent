@@ -18,6 +18,7 @@ export class EventViewPage {
     }
 
     async getEventTitleString(){
+        await this.page.waitForURL('**/view');
         return await this.eventTitle.textContent() as string;
     }
 

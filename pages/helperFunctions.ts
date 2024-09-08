@@ -6,6 +6,12 @@ export interface Time {
     plainTimeString: string;
 }
 
+export interface Secrets {
+    email: string;
+    password: string;
+    calendarId: string;
+}
+
 export class HelperFunctions {
 
     getDateFormatOptions() {
@@ -44,6 +50,10 @@ export class HelperFunctions {
         const newDate = new Date(originalDate.getTime() + daysToAdd * 24 * 60 * 60 * 1000);
 
         return newDate.toLocaleDateString('en-US', this.getDateFormatOptions());
+    }
+
+    getSecrets() {
+        return this.readJsonFile('secrets.json') as Secrets;
     }
 
     readJsonFile(filePath: string): any {
