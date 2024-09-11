@@ -1,6 +1,7 @@
 import { test as setup } from '@playwright/test';
 import { HelperFunctions } from '../pages/helperFunctions';
 import { SignInPage } from '../pages/signInPage';
+import { DashboardPage } from '../pages/dashboardPage';
 
 setup('setup authentication state', async ({ page }) => {
     console.log('creating new authentication state');
@@ -9,5 +10,7 @@ setup('setup authentication state', async ({ page }) => {
     const signIn = new SignInPage(page);
 	await signIn.open();
 	await signIn.signIn(secrets.email, secrets.password);
+    const dashboardPage = new DashboardPage(page);
+    await dashboardPage.waitForDashboardPageToLoad();
     await page.context().storageState({ path: 'storage-state.json' });
 });

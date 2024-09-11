@@ -28,9 +28,13 @@ export class DashboardPage {
         return "/calendars/" + this.secrets.calendarId;
     }
 
+    async waitForDashboardPageToLoad() {
+        await this.page.waitForURL(`${this.getDashboardUrl()}**`);
+    }
+
     async open() {
         await this.page.goto(this.getDashboardUrl());
-        await this.page.waitForURL(`${this.getDashboardUrl()}**`);
+        await this.waitForDashboardPageToLoad();
 
     }
 

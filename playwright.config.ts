@@ -56,7 +56,10 @@ export default defineConfig({
 
     {
       name: 'add event hobby account > firefox',
-      use: { ...devices['Desktop Firefox'] },
+      use: { 
+        ...devices['Desktop Firefox'],
+        storageState: 'storage-state.json',
+       },
       testIgnore: /.*signIn.spec.ts/,
       dependencies: ['setup event creation for hobby account'],
     },
@@ -65,7 +68,8 @@ export default defineConfig({
       name: 'add event hobby account > chrome',
       use: { 
         ...devices['Desktop Chrome'],
-        channel: 'chrome'
+        channel: 'chrome',
+        storageState: 'storage-state.json',
       },
       testIgnore: /.*signIn.spec.ts/,
       dependencies: ['setup event creation for hobby account'],
@@ -75,7 +79,8 @@ export default defineConfig({
       name: 'add event hobby account > edge',
       use: { 
         ...devices['Desktop Edge'],
-        channel: 'msedge'
+        channel: 'msedge',
+        storageState: 'storage-state.json',
       },
       testIgnore: /.*signIn.spec.ts/,
       dependencies: ['setup event creation for hobby account'],
