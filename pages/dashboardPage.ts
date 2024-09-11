@@ -15,7 +15,7 @@ export class DashboardPage {
         this.page = page;
         this.helpers = new HelperFunctions();
         this.secrets = this.helpers.getSecrets();
-        
+
         // Elements
         this.createLink = page.getByRole('link', { name: 'Create' });
         this.createEventLink = page.getByRole('link', { name: 'Event category' });
@@ -59,7 +59,7 @@ export class DashboardPage {
         const events = await this.eventsLinksOnList.count();
         if (events > 0) {
             for (const event of await this.eventsLinksOnList.all()) {
-                await event.click();
+                await event.click({ delay: 200 });
                 await this.deleteButton.click();
                 await this.confirmDelete.click();
             };

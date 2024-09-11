@@ -1,0 +1,13 @@
+import { test as setup } from '@playwright/test';
+import { HelperFunctions } from '../pages/helperFunctions';
+import { SignInPage } from '../pages/signInPage';
+
+setup('setup authentication state', async ({ page }) => {
+    console.log('creating new authentication state');
+    const helpers = new HelperFunctions();
+    const secrets = helpers.getSecrets();
+    const signIn = new SignInPage(page);
+	await signIn.open();
+	await signIn.signIn(secrets.email, secrets.password);
+    await page.context().storageState({ path: 'storage-state.json' });
+});
