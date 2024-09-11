@@ -1,15 +1,13 @@
 import { expect, test } from '@playwright/test';
-import { SignInPage } from '../pages/signInPage';
 import { DashboardPage } from '../pages/dashboardPage';
 import { CreateEventPage } from '../pages/createEventPage';
 import { EventViewPage } from '../pages/eventViewPage';
-import { Secrets, HelperFunctions, Time } from '../pages/helperFunctions';
+import { HelperFunctions, Time } from '../pages/helperFunctions';
 
 const helpers = new HelperFunctions();
 let dashboardPage: DashboardPage;
 let createEventPage: CreateEventPage;
 let eventViewPage: EventViewPage;
-let secrets: Secrets;
 
 const fiveMinutesAhead: Time = helpers.getTimeFromNow(5);
 const tenMinutesAhead: Time = helpers.getTimeFromNow(10);
@@ -17,22 +15,11 @@ const fifteenMinutesAhead: Time = helpers.getTimeFromNow(15);
 const thirtyMinutesAhead: Time = helpers.getTimeFromNow(30);
 const sixtyMinutesAhead: Time = helpers.getTimeFromNow(60);
 
-test.beforeAll('Get Secrets', async () => {
-	secrets = helpers.getSecrets();
-})
-
 test.beforeEach('Login', async ({ page }) => {
-	const signIn = new SignInPage(page);
-	await signIn.open();
-	await signIn.signIn(secrets.email, secrets.password)
 	dashboardPage = new DashboardPage(page);
+	await dashboardPage.open();
 	createEventPage = new CreateEventPage(page);
 	eventViewPage = new EventViewPage(page);
-})
-
-test.afterEach('Delete Events', async () => {
-	await dashboardPage.openAllEvent();
-	await dashboardPage.deleteAllEvents();
 })
 
 test.describe('group', {

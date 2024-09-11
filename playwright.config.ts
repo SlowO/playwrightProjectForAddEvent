@@ -28,26 +28,80 @@ export default defineConfig({
     headless: false,
     // Base URL to use in actions like `await page.goto('/')`.
     baseURL: 'https://app.addevent.com',
-    
+    //storageState: 'storage-state.json',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
   },
 
-  /* Configure projects for major browsers */
+  // path to the global teardown files.
+  //globalTeardown: require.resolve('./global-teardown'),
+
+  /* Configured projects according to test's needs */
   projects: [
+    {
+      name: 'setup event creation for hobby account',
+      testMatch: /global\.setup\.hobby\.ts/,
+      teardown: 'cleanup event creation for hobby account',
+      use: {
+        storageState: 'storage-state.json',
+      },
+    },
+    {
+      name: 'cleanup event creation for hobby account',
+      testMatch: /global\.teardown\.hobby\.ts/,
+      use: {
+        storageState: 'storage-state.json',
+      },
+    },
+
+    {
+      name: 'add event hobby account > firefox',
+      use: { 
+        ...devices['Desktop Firefox'],
+        storageState: 'storage-state.json',
+       },
+      testIgnore: /.*signIn.spec.ts/,
+      dependencies: ['setup event creation for hobby account'],
+    },
+
+    {
+      name: 'add event hobby account > chrome',
+      use: { 
+        ...devices['Desktop Chrome'],
+        channel: 'chrome',
+        storageState: 'storage-state.json',
+      },
+      testIgnore: /.*signIn.spec.ts/,
+      dependencies: ['setup event creation for hobby account'],
+    },
+
+    {
+      name: 'add event hobby account > edge',
+      use: { 
+        ...devices['Desktop Edge'],
+        channel: 'msedge',
+        storageState: 'storage-state.json',
+      },
+      testIgnore: /.*signIn.spec.ts/,
+      dependencies: ['setup event creation for hobby account'],
+    },
+
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+      testMatch: /.*signIn.spec.ts/,
     },
 
     {
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
+      testMatch: /.*signIn.spec.ts/,
     },
 
     {
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
+      testMatch: /.*signIn.spec.ts/,
     },
 
     /* Test against mobile viewports. */

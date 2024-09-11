@@ -25,12 +25,12 @@ export class SignInPage {
     async fillEmail(email: string){
         await this.emailField.click();
         await this.emailField.clear();
-        await this.emailField.fill(email);
+        await this.emailField.pressSequentially(email, {delay: 50});
     }
 
     async fillPassword(password: string){
         await this.passwordField.click();
-        await this.passwordField.fill(password);
+        await this.passwordField.pressSequentially(password, {delay: 50});
     }
 
     async clickSignInButton(){

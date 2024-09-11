@@ -15,7 +15,7 @@ export class DashboardPage {
         this.page = page;
         this.helpers = new HelperFunctions();
         this.secrets = this.helpers.getSecrets();
-        
+
         // Elements
         this.createLink = page.getByRole('link', { name: 'Create' });
         this.createEventLink = page.getByRole('link', { name: 'Event category' });
@@ -28,9 +28,13 @@ export class DashboardPage {
         return "/calendars/" + this.secrets.calendarId;
     }
 
+    async waitForDashboardPageToLoad() {
+        await this.page.waitForURL(`${this.getDashboardUrl()}**`);
+    }
+
     async open() {
         await this.page.goto(this.getDashboardUrl());
-        await this.page.waitForURL(`${this.getDashboardUrl()}**`);
+        await this.waitForDashboardPageToLoad();
 
     }
 
@@ -59,7 +63,7 @@ export class DashboardPage {
         const events = await this.eventsLinksOnList.count();
         if (events > 0) {
             for (const event of await this.eventsLinksOnList.all()) {
-                await event.click();
+                await event.click({ delay: 200 });
                 await this.deleteButton.click();
                 await this.confirmDelete.click();
             };
