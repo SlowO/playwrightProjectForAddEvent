@@ -7,7 +7,7 @@ export class SignInPage {
     readonly signInButton: Locator;
     readonly errorLocator: Locator;
 
-    constructor(page: Page){
+    constructor(page: Page) {
         this.page = page;
 
         // Elements
@@ -17,27 +17,32 @@ export class SignInPage {
         this.errorLocator = page.locator('.noti-wr-t1');
     }
 
-    async open(){
+    async open() {
         await this.page.goto('/signin');
         await this.page.waitForURL('**/signin**');
     }
 
-    async fillEmail(email: string){
+    async fillEmail(email: string) {
         await this.emailField.click();
         await this.emailField.clear();
-        await this.emailField.pressSequentially(email, {delay: 50});
+        await this.emailField.fill(email);
     }
 
-    async fillPassword(password: string){
+    async fillPassword(password: string) {
         await this.passwordField.click();
-        await this.passwordField.pressSequentially(password, {delay: 50});
+        await this.passwordField.fill(password);
     }
 
-    async clickSignInButton(){
-        await this.signInButton.click();
+    async clickSignInButton(isDelay = false) {
+        if (isDelay == true) {
+            await this.signInButton.click({ delay: 200 });
+            await this.page.waitForLoadState('networkidle');
+        } else {
+            await this.signInButton.click({});
+        }
     }
 
-    async signIn(email: string, password: string){
+    async signIn(email: string, password: string) {
         await this.fillEmail(email);
         await this.fillPassword(password);
         await this.clickSignInButton();
