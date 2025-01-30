@@ -25,7 +25,13 @@ test.beforeEach('Login', async ({ page }) => {
 test.describe('group', {
 	tag: '@createEvent',
 }, () => {
-	test('Add new event with random start and end dates', async () => {
+	test('Add new event with random start and end dates', async ({ page }) => {
+		// Verify no errors in console during test run
+		const errors: Error[] = [];
+		page.on("pageerror", (error) => {
+			errors.push(error);
+		});
+
 		const randomFutureDate = helpers.generateRandomFutureDate();
 		const endDate = helpers.addDaysToDate(randomFutureDate, Math.random() * 5);
 		const title = `My Event for ${randomFutureDate} to ${endDate}`;
@@ -44,6 +50,8 @@ test.describe('group', {
 		expect(dateOnPage?.includes(randomFutureDate)).toBeTruthy()
 		expect(dateOnPage?.includes(endDate)).toBeTruthy()
 		expect(eventLink?.includes(eventId)).toBeTruthy()
+		// Assert no errors exist in console
+		expect(errors).toHaveLength(0);
 	});
 
 	test.describe('Add new event with a specific time frame for today', () => {
